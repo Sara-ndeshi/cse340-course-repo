@@ -1,0 +1,14 @@
+<%- include('partials/header') %>
+
+<section class="content-card">
+    <h2>Service Project Categories</h2>
+    <p>Explore the different branches of service available:</p>
+    
+    <ul class="categories-list">
+        <% categories.forEach((category) => { %>
+            <li><%= category %></li>
+        <% }) %>
+    </ul>
+</section>
+
+<%- include('partials/footer') %>
