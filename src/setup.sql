@@ -54,3 +54,50 @@ VALUES
 (3, 'Food Pantry Sorting Night', 'Checking expiration dates and organizing canned goods shelves.', 'City Food Bank', '2026-07-11'),
 (3, 'Shelter Blanket Distribution', 'Handing out clothing and blankets to those in temporary housing.', 'Grace Shelter', '2026-07-30'),
 (3, 'Youth Mentorship Kickoff', 'Setting up games and matching tutors with local children.', 'Boys and Girls Club', '2026-08-15');
+
+-- ========================================
+-- 5. Category Table Schema
+-- ========================================
+CREATE TABLE IF NOT EXISTS category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+-- ========================================
+-- 6. Project-Category Join Table Schema (Many-to-Many)
+-- ========================================
+CREATE TABLE IF NOT EXISTS project_category (
+    project_id INT NOT NULL,
+    category_id INT NOT NULL,
+    PRIMARY KEY (project_id, category_id),
+    CONSTRAINT fk_project 
+        FOREIGN KEY (project_id) 
+        REFERENCES project(project_id) 
+        ON DELETE CASCADE,
+    CONSTRAINT fk_category 
+        FOREIGN KEY (category_id) 
+        REFERENCES category(category_id) 
+        ON DELETE CASCADE
+);
+
+-- ========================================
+-- 7. Insert Sample Data: Categories
+-- ========================================
+INSERT INTO category (name)
+VALUES
+('Environmental'),
+('Educational'),
+('Community Service'),
+('Health and Wellness');
+
+-- ========================================
+-- 8. Link Existing 15 Projects to Categories
+-- ========================================
+INSERT INTO project_category (project_id, category_id)
+VALUES
+-- Projects 1-5 (BrightFuture Builders) -> Community Service (3) & Environmental (1)
+(1, 3), (2, 3), (2, 1), (3, 3), (4, 3), (5, 3),
+-- Projects 6-10 (GreenHarvest Growers) -> Environmental (1) & Health and Wellness (4)
+(6, 1), (6, 4), (7, 1), (8, 1), (9, 3), (9, 4), (10, 2), (10, 1),
+-- Projects 11-15 (UnityServe Volunteers) -> Community Service (3) & Educational (2)
+(11, 4), (11, 3), (12, 2), (12, 3), (13, 3), (14, 3), (15, 2);

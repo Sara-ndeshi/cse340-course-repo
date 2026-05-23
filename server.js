@@ -4,7 +4,7 @@ import path from 'path';
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
 import { getAllProjects } from './src/models/projects.js';
-
+import { getAllCategories } from './src/models/categories.js';
 
 // Define the the application environment
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
@@ -58,14 +58,14 @@ app.get('/projects', async (req, res) => {
 });
 
 app.get('/categories', async (req, res) => {
-    const title = 'Categories';
-    const projectCategories = [
-        'Environmental',
-        'Educational',
-        'Community Service',
-        'Health and Wellness'
-    ];
-    res.render('categories', { title, categories: projectCategories });
+    try {
+        const categories = await getAllCategories();
+        const title = 'Categories';
+        res.render('categories', { title, categories });
+    } catch (error) {
+        console.error('❌ Error fetching categories:', error.message);
+        res.status(500).send('Error loading categories');
+    }
 });
 
 app.listen(PORT, async () => {
